@@ -1,0 +1,19 @@
+## Visual studio
+
+build/win-vs/*.sln
+build/win-vs/*.sdf
+build/win-vs/*.opendb
+build/win-vs/sysbuild
+build/win-vs/Debug
+build/win-vs/.vs
+
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## xcode
+
+build/osx-xcode/build
+build/osx-xcode/*.xcodeproj/project.xcworkspace
+build/osx-xcode/*.xcodeproj/xcuserdata
