@@ -237,7 +237,7 @@ static t_symbol	 *sym_env;
 
 int C74_EXPORT main(void)
 {
-	t_class *c = class_new("granular~", (method)granular_new, (method)granular_free, (long)sizeof(t_granular), 0L, A_GIMME, 0);
+	t_class *c = class_new("y.granular~", (method)granular_new, (method)granular_free, (long)sizeof(t_granular), 0L, A_GIMME, 0);
 
 	class_addmethod(c, (method)granular_notify,	"notify",	A_CANT, 0);
 	class_addmethod(c, (method)granular_dsp64,	"dsp64",	A_CANT, 0);
