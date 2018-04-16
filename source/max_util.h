@@ -10,27 +10,27 @@
 // ====  OUTPUTTING INFORMATION  ====
 
 #define _TRACE false
-#define TRACE(...) do { if (_TRACE) object_post((t_object *)x, "TRACE:  " __VA_ARGS__); } while (0)
+#define TRACE(...) do { if (_TRACE) object_post((t_object*)x, "TRACE:  " __VA_ARGS__); } while (0)
 
 #define _POST true
-#define POST(...) do { if (_POST) object_post((t_object *)x, __VA_ARGS__); } while (0)
+#define POST(...) do { if (_POST) object_post((t_object*)x, __VA_ARGS__); } while (0)
 
 #define _WARNING false
-#define WARNING(...) do { if (_WARNING) object_post((t_object *)x, "WARNING:  " __VA_ARGS__); } while (0)
+#define WARNING(...) do { if (_WARNING) object_post((t_object*)x, "WARNING:  " __VA_ARGS__); } while (0)
 
 #define _ERR true
-#define MY_ERR(...)  do { if (_ERR) object_post((t_object *)x,  "ERROR:  " __VA_ARGS__); } while (0)
-#define MY_ERR2(...)  do { if (_ERR) object_post((t_object *)x, __VA_ARGS__); } while (0)
+#define MY_ERR(...)  do { if (_ERR) object_post((t_object*)x,  "ERROR:  " __VA_ARGS__); } while (0)
+#define MY_ERR2(...)  do { if (_ERR) object_post((t_object*)x, __VA_ARGS__); } while (0)
 
-#define MY_ASSERT(test, ...) if (test) { object_post((t_object *)x, "ERROR:  " __VA_ARGS__); return; }
-#define MY_ASSERT_GOTO(test, label, ...) if (test) { object_post((t_object *)x, "ERROR:  " __VA_ARGS__); goto label; }
-#define MY_ASSERT_ERR(test, err, ...) if (test) { object_post((t_object *)x, "ERROR:  " __VA_ARGS__); return err; }
-#define MY_ASSERT_RETURN(test, ret, ...) if (test) { object_post((t_object *)x, "ERROR:  " __VA_ARGS__); return ret; }
+#define MY_ASSERT(test, ...) if (test) { object_post((t_object*)x, "ERROR:  " __VA_ARGS__); return; }
+#define MY_ASSERT_GOTO(test, label, ...) if (test) { object_post((t_object*)x, "ERROR:  " __VA_ARGS__); goto label; }
+#define MY_ASSERT_ERR(test, err, ...) if (test) { object_post((t_object*)x, "ERROR:  " __VA_ARGS__); return err; }
+#define MY_ASSERT_RETURN(test, ret, ...) if (test) { object_post((t_object*)x, "ERROR:  " __VA_ARGS__); return ret; }
 
 // ====  ENUM  ====
 
-typedef enum _my_err
-{
+typedef enum _my_err {
+
   ERR_NULL,    // For initialization, should never be returned
   ERR_NONE,
   ERR_ARG_TYPE,
@@ -58,16 +58,16 @@ typedef enum _my_err
 
 // ====  PROCEDURE DECLARATIONS  ====
 
-void mess_sym_long    (void *outlet, t_symbol *sym, t_atom_long l, t_atom *atoms);
-void mess_sym_longs   (void *outlet, t_symbol *sym, t_uint32 n, t_atom_long *l, t_atom *atoms);
-void mess_sym_float   (void *outlet, t_symbol *sym, t_float f, t_atom *atoms);
-void mess_sym_floats  (void *outlet, t_symbol *sym, t_uint32 n, t_float *f, t_atom *atoms);
-void mess_sym_double  (void *outlet, t_symbol *sym, t_double d, t_atom *atoms);
-void mess_sym_doubles (void *outlet, t_symbol *sym, t_uint32 n, t_double *d, t_atom *atoms);
-void mess_sym_sym     (void *outlet, t_symbol *sym, t_symbol *sym2, t_atom *atoms);
-void mess_sym_sing    (void *outlet, t_symbol *sym, char *str, t_atom *atoms);
+void mess_sym_long    (void* outlet, t_symbol* sym, t_atom_long l, t_atom* atoms);
+void mess_sym_longs   (void* outlet, t_symbol* sym, t_uint32 n, t_atom_long* l, t_atom* atoms);
+void mess_sym_float   (void* outlet, t_symbol* sym, t_float f, t_atom* atoms);
+void mess_sym_floats  (void* outlet, t_symbol* sym, t_uint32 n, t_float* f, t_atom* atoms);
+void mess_sym_double  (void* outlet, t_symbol* sym, t_double d, t_atom* atoms);
+void mess_sym_doubles (void* outlet, t_symbol* sym, t_uint32 n, t_double* d, t_atom* atoms);
+void mess_sym_sym     (void* outlet, t_symbol* sym, t_symbol* sym2, t_atom* atoms);
+void mess_sym_sing    (void* outlet, t_symbol* sym, char* str, t_atom* atoms);
 
-void mess_sing (void *outlet, char *str, t_atom *atoms);
+void mess_sing (void* outlet, char* str, t_atom* atoms);
 
 // ========  END OF HEADER FILE  ========
 

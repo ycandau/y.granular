@@ -17,33 +17,33 @@
 //   The used list is initially:  (END)
 //   The empty list is initially: 0, 1, 2, ... n-1 (END)
 
-t_list *list_new(t_int16 n)
-{
-	t_list *list = (t_list *)sysmem_newptr(sizeof(t_list));
-	if (list == NULL) { return NULL; }
+t_list* list_new(t_int16 n) {
 
-	list->len		= n;
-	list->array	= (t_int16 *)sysmem_newptr((list->len + 2) * sizeof(t_int16));
+  t_list* list = (t_list*)sysmem_newptr(sizeof(t_list));
+  if (list == NULL) { return NULL; }
 
-	list->first_used  = list->array + list->len;
+  list->len   = n;
+  list->array = (t_int16*)sysmem_newptr((list->len + 2) * sizeof(t_int16));
 
-	list->first_empty = list->array + list->len + 1;
-	
-	for (t_int16 i = 0; i < list->len - 1; i++) { list->array[i] = i + 1; }
-	list->array[list->len - 1] = LIST_END;
-	list->array[list->len]		 = LIST_END;
-	list->array[list->len + 1] = 0;
+  list->first_used  = list->array + list->len;
 
-	return list;
+  list->first_empty = list->array + list->len + 1;
+
+  for (t_int16 i = 0; i < list->len - 1; i++) { list->array[i] = i + 1; }
+  list->array[list->len - 1] = LIST_END;
+  list->array[list->len]     = LIST_END;
+  list->array[list->len + 1] = 0;
+
+  return list;
 }
 
 // ====  DESTRUCTOR: LIST_FREE  ====
 // Frees the memory allocated when the list was created
 
-void list_free(t_list *list)
-{
-	sysmem_freeptr(list->array);
-	sysmem_freeptr(list);
+void list_free(t_list* list) {
+
+  sysmem_freeptr(list->array);
+  sysmem_freeptr(list);
 }
 
 // ====  PROCEDURE: LIST_PREV_NODE  ====
@@ -51,17 +51,17 @@ void list_free(t_list *list)
 // RETURNS: The previous node
 // SLOW: Loops through the used list to find the previous node
 
-t_int16	*list_prev_node(t_list *list, t_int16 *node)
-{
-	// If the node is already the first one, return the same node
-	#ifdef LIST_SAFE
-	if (node == list->first_used) { return node; }
-	#endif
+t_int16* list_prev_node(t_list* list, t_int16* node) {
 
-	t_int16 *current = list->first_used;
-	while (list->array + *current != node) { current = list->array + *current; }
-	
-	return (current);
+  // If the node is already the first one, return the same node
+  #ifdef LIST_SAFE
+  if (node == list->first_used) { return node; }
+  #endif
+
+  t_int16* current = list->first_used;
+  while (list->array + *current != node) { current = list->array + *current; }
+
+  return (current);
 }
 
 // ====  PROCEDURE: LIST_INSERT_ALL  ====
@@ -69,9 +69,9 @@ t_int16	*list_prev_node(t_list *list, t_int16 *node)
 // RETURNS: Nothing
 // SLOW: Loops through the empty list to find the last empty node
 
-void list_insert_all(t_list *list)
-{
-	;
+void list_insert_all(t_list* list) {
+
+  ;
 }
 
 // ====  PROCEDURE: LIST_INSERT_LAST  ====
@@ -79,22 +79,22 @@ void list_insert_all(t_list *list)
 // RETURNS: The index of the node just inserted
 // SLOW: Loops through the used list to find the last node
 
-t_int16 list_insert_last(t_list *list)
-{
-	// If no empty nodes are available, return an error
-	#ifdef LIST_SAFE
-	if (*list->first_empty == LIST_END) { return LIST_ERR_FULL; }
-	#endif
+t_int16 list_insert_last(t_list* list) {
 
-	// Iterate through the used list to find the last node
-	t_int16 *node = list->first_used;
-	while (*node != LIST_END) { node = list->array + *node; }
-	
-	*node							 = *list->first_empty;
-	*list->first_empty = list->array[*node];
-	list->array[*node] = LIST_END;
+  // If no empty nodes are available, return an error
+  #ifdef LIST_SAFE
+  if (*list->first_empty == LIST_END) { return LIST_ERR_FULL; }
+  #endif
 
-	return *node;
+  // Iterate through the used list to find the last node
+  t_int16* node = list->first_used;
+  while (*node != LIST_END) { node = list->array + *node; }
+
+  *node              = *list->first_empty;
+  *list->first_empty = list->array[*node];
+  list->array[*node] = LIST_END;
+
+  return* node;
 }
 
 // ====  PROCEDURE: LIST_INSERT_NTH  ====
@@ -103,24 +103,24 @@ t_int16 list_insert_last(t_list *list)
 // RETURNS: The index of the node just inserted
 // SLOW: Loops through the used list to find the nth node
 
-t_int16 list_insert_nth(t_list *list, t_int16 n)
-{
-	// If no empty nodes are available, return an error
-	#ifdef LIST_SAFE
-	if (*list->first_empty == LIST_END) { return LIST_ERR_FULL; }
-	#endif
+t_int16 list_insert_nth(t_list* list, t_int16 n) {
 
-	// Iterate through the used list to find the nth node
-	t_int16 cnt = n;
-	t_int16 *node = list->first_used;
-	while ((*node != LIST_END) && (cnt > 0)) { node = list->array + *node; cnt--; }
+  // If no empty nodes are available, return an error
+  #ifdef LIST_SAFE
+  if (*list->first_empty == LIST_END) { return LIST_ERR_FULL; }
+  #endif
 
-	t_int16 tmp				 = *list->first_empty;
-	*list->first_empty = list->array[tmp];
-	list->array[tmp]	 = *node;
-	*node = tmp;
+  // Iterate through the used list to find the nth node
+  t_int16 cnt = n;
+  t_int16* node = list->first_used;
+  while ((*node != LIST_END) && (cnt > 0)) { node = list->array + *node; cnt--; }
 
-	return tmp;
+  t_int16 tmp        = *list->first_empty;
+  *list->first_empty = list->array[tmp];
+  list->array[tmp]   = *node;
+  *node = tmp;
+
+  return tmp;
 }
 
 // ====  PROCEDURE: LIST_INSERT_INDEX  ====
@@ -129,20 +129,20 @@ t_int16 list_insert_nth(t_list *list, t_int16 n)
 // RETURNS: The index of the node just inserted
 // SLOW: Loops through the empty list to find the index
 
-t_int16 list_insert_index(t_list *list, t_int16 index)
-{
-	// Iterate through the empty list to find the index
-	t_int16 *node = list->first_empty;
-	while ((*node != LIST_END) && (*node != index)) { node = list->array + *node; }
+t_int16 list_insert_index(t_list* list, t_int16 index) {
 
-	// If the index is not found return LIST_NOT_FOUND
-	if (*node == LIST_END) { return LIST_NOT_FOUND; }
+  // Iterate through the empty list to find the index
+  t_int16* node = list->first_empty;
+  while ((*node != LIST_END) && (*node != index)) { node = list->array + *node; }
 
-	*node							 = list->array[index];
-	list->array[index] = *list->first_used;
-	*list->first_used	 = index;
+  // If the index is not found return LIST_NOT_FOUND
+  if (*node == LIST_END) { return LIST_NOT_FOUND; }
 
-	return index;
+  *node              = list->array[index];
+  list->array[index] = *list->first_used;
+  *list->first_used  = index;
+
+  return index;
 }
 
 // ====  PROCEDURE: LIST_REMOVE_ALL  ====
@@ -150,9 +150,9 @@ t_int16 list_insert_index(t_list *list, t_int16 index)
 // RETURNS: Nothing
 // SLOW: Loops through the used list to find the last used node
 
-void list_remove_all(t_list *list)
-{
-	;
+void list_remove_all(t_list* list) {
+
+  ;
 }
 
 // ====  PROCEDURE: LIST_REMOVE_LAST  ====
@@ -160,23 +160,23 @@ void list_remove_all(t_list *list)
 // RETURNS: The index of the node just removed
 // SLOW: Loops through the used list to find the last node
 
-t_int16 list_remove_last(t_list *list)
-{
-	// If the used list is already empty, return an error
-	#ifdef LIST_SAFE
-	if (*list->first_used == LIST_END) { return LIST_ERR_EMPTY; }
-	#endif
+t_int16 list_remove_last(t_list* list) {
 
-	// Iterate through the used list to find the last node
-	t_int16 *node = list->first_used;
-	t_int16 *next = list->array + *node;
-	while (*next != LIST_END) { node = next; next = list->array + *node; }
-	
-	list->array[*node] = *list->first_empty;
-	*list->first_empty = *node;
-	*node							 = LIST_END;
+  // If the used list is already empty, return an error
+  #ifdef LIST_SAFE
+  if (*list->first_used == LIST_END) { return LIST_ERR_EMPTY; }
+  #endif
 
-	return *node;
+  // Iterate through the used list to find the last node
+  t_int16* node = list->first_used;
+  t_int16* next = list->array + *node;
+  while (*next != LIST_END) { node = next; next = list->array + *node; }
+
+  list->array[*node] = *list->first_empty;
+  *list->first_empty = *node;
+  *node              = LIST_END;
+
+  return* node;
 }
 
 // ====  PROCEDURE: LIST_REMOVE_NTH  ====
@@ -184,26 +184,26 @@ t_int16 list_remove_last(t_list *list)
 // RETURNS: The index of the node just removed
 // SLOW: Loops through the used list to find the nth node
 
-t_int16 list_remove_nth(t_list *list, t_int16 n)
-{
-	// If the used list is already empty, return an error
-	#ifdef LIST_SAFE
-	if (*list->first_used == LIST_END) { return LIST_ERR_EMPTY; }
-	#endif
+t_int16 list_remove_nth(t_list* list, t_int16 n) {
 
-	// Iterate through the used list to find the nth node
-	t_int16 cnt = n;
-	t_int16 *node = list->first_used;
-	while ((*node != LIST_END) && (cnt > 0)) { node = list->array + *node; cnt--; }
+  // If the used list is already empty, return an error
+  #ifdef LIST_SAFE
+  if (*list->first_used == LIST_END) { return LIST_ERR_EMPTY; }
+  #endif
 
-	if (*node == LIST_END) { return LIST_ERR_ARG; }
+  // Iterate through the used list to find the nth node
+  t_int16 cnt = n;
+  t_int16* node = list->first_used;
+  while ((*node != LIST_END) && (cnt > 0)) { node = list->array + *node; cnt--; }
 
-	t_int16 tmp = *node;
-	*node = list->array[tmp];
-	list->array[tmp] = *list->first_empty;
-	*list->first_empty = tmp;
+  if (*node == LIST_END) { return LIST_ERR_ARG; }
 
-	return tmp;
+  t_int16 tmp = *node;
+  *node = list->array[tmp];
+  list->array[tmp] = *list->first_empty;
+  *list->first_empty = tmp;
+
+  return tmp;
 }
 
 // ====  PROCEDURE: LIST_REMOVE_INDEX  ====
@@ -212,70 +212,74 @@ t_int16 list_remove_nth(t_list *list, t_int16 n)
 // RETURNS: The index of the node just removed
 // SLOW: Loops through the used list to find the index
 
-t_int16 list_remove_index(t_list *list, t_int16 index)
-{
-	// Iterate through the used list to find the index
-	t_int16 *node = list->first_used;
-	while ((*node != LIST_END) && (*node != index)) { node = list->array + *node; }
+t_int16 list_remove_index(t_list* list, t_int16 index) {
 
-	// If the index is not found return LIST_NOT_FOUND
-	if (*node == LIST_END) { return LIST_NOT_FOUND; }
+  // Iterate through the used list to find the index
+  t_int16* node = list->first_used;
+  while ((*node != LIST_END) && (*node != index)) { node = list->array + *node; }
 
-	*node = list->array[index];
-	list->array[index] = *list->first_empty;
-	*list->first_empty = index;
+  // If the index is not found return LIST_NOT_FOUND
+  if (*node == LIST_END) { return LIST_NOT_FOUND; }
 
-	return index;
+  *node = list->array[index];
+  list->array[index] = *list->first_empty;
+  *list->first_empty = index;
+
+  return index;
 }
 
 // ====  PROCEDURE: LIST_POST  ====
 // Posts the current state of the list in the Max window
 
-void list_post(void *x, t_list *list)
-{
-	char tmp[10];
+void list_post(void* x, t_list* list) {
 
-	t_int16  n_used = 0;
-	t_int32	 l_used = (t_int32)strlen("  Used list: ");
-	t_int16 *ptr = list->first_used;
+  char tmp[10];
 
-	while (*ptr != LIST_END) {
-		n_used++;
-		sprintf(tmp, "%i ", *ptr);
-		l_used += (t_int32)strlen(tmp);
-		ptr = list->array + *ptr; }
+  t_int16  n_used = 0;
+  t_int32  l_used = (t_int32)strlen("  Used list: ");
+  t_int16* ptr = list->first_used;
 
-	t_int16  n_empty = 0;
-	t_int32	 l_empty = (t_int32)strlen("  Empty list: ");
+  while (*ptr != LIST_END) {
+    n_used++;
+    sprintf(tmp, "%i ", *ptr);
+    l_used += (t_int32)strlen(tmp);
+    ptr = list->array + *ptr;
+  }
 
-	ptr = list->first_empty;
-	while (*ptr != LIST_END) {
-		n_empty++;
-		sprintf(tmp, "%i ", *ptr);
-		l_empty += (t_int32)strlen(tmp);
-		ptr = list->array + *ptr; }
-	
-	object_post((t_object *)x, "List length: %i - %i used - %i empty", n_used + n_empty, n_used, n_empty);
+  t_int16  n_empty = 0;
+  t_int32  l_empty = (t_int32)strlen("  Empty list: ");
 
-	char *str = (char *)sysmem_newptr((l_used + l_empty) * sizeof(char));
-	
-	strcpy(str, "  Used list: ");
-	ptr = list->first_used;
-	while (*ptr != LIST_END) {
-		sprintf(tmp, "%i ", *ptr);
-		strcat(str, tmp);
-		ptr = list->array + *ptr; }
+  ptr = list->first_empty;
+  while (*ptr != LIST_END) {
+    n_empty++;
+    sprintf(tmp, "%i ", *ptr);
+    l_empty += (t_int32)strlen(tmp);
+    ptr = list->array + *ptr;
+  }
 
-	object_post((t_object *)x, str);
+  object_post((t_object*)x, "List length: %i - %i used - %i empty", n_used + n_empty, n_used, n_empty);
 
-	strcpy(str, "  Empty list: ");
-	ptr = list->first_empty;
-	while (*ptr != LIST_END) {
-		sprintf(tmp, "%i ", *ptr);
-		strcat(str, tmp);
-		ptr = list->array + *ptr; }
+  char* str = (char*)sysmem_newptr((l_used + l_empty) * sizeof(char));
 
-	object_post((t_object *)x, str);
+  strcpy(str, "  Used list: ");
+  ptr = list->first_used;
+  while (*ptr != LIST_END) {
+    sprintf(tmp, "%i ", *ptr);
+    strcat(str, tmp);
+    ptr = list->array + *ptr;
+  }
 
-	sysmem_freeptr(str);
+  object_post((t_object*)x, str);
+
+  strcpy(str, "  Empty list: ");
+  ptr = list->first_empty;
+  while (*ptr != LIST_END) {
+    sprintf(tmp, "%i ", *ptr);
+    strcat(str, tmp);
+    ptr = list->array + *ptr;
+  }
+
+  object_post((t_object*)x, str);
+
+  sysmem_freeptr(str);
 }
